@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Canvas Helper</title>
+  <script type="text/javascript" src="canvas-helper.js"></script>
+</head>
+<body>
+
+  <div style="height:200px;" id="basic"></div>
+  <div style="height:200px;" id="line"></div>
+  <div style="height:200px;" id="scatter"></div>
+
+  <script type="text/javascript" charset="utf-8">
+    $canvas(function(g, s) {
+      g.fillStyle = "rgba(0,0,0,0.2)";
+      g.fillRect(0, 0, s.width, s.height);
+    }, document.getElementById("basic"));
+
+    var data = [];
+    for(var i = 0;i < 500;i++) {
+      data.push(Math.round(Math.random() * 100))
+    }
+
+    $canvas(function(g, s) {
+      s.auto(data);
+      g.strokeStyle = "rgb(113,197,239)";
+      g.moveTo(s.x(0), s.y(data[0]));
+      for(var i = 0;i < data.length;i++) {
+        g.lineTo(s.x(i), s.y(data[i]));
+      }
+      g.stroke();
+    }, document.getElementById("line"));
+
+    var scatter = [];
+    for(var i = 0;i < 5000;i++) {
+      scatter.push([Math.round(Math.random() * 100), Math.round(Math.random() * 100)])
+    }
+
+    $canvas(function(g, s) {
+      s.auto(scatter);
+      g.fillStyle = "rgba(108,211,165,0.3)";
+      for(var i = 0;i < scatter.length;i++) {
+        var x = s.x(scatter[i][0]);
+        var y = s.y(scatter[i][1]);
+        g.fillRect(x - 2, y - 2, 4, 4);
+      }
+    }, document.getElementById("scatter"));
+
+  </script>
+</body>
+</html>
