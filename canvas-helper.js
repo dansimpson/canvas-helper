@@ -4,10 +4,10 @@
   function Scale(el) {
     this.el = el;
     this.resize();
-    this.x1 = 0;
-    this.x2 = this.width;
-    this.y1 = 0;
-    this.y2 = this.height;
+    this.x1 = Infinity;
+    this.x2 = -Infinity;
+    this.y1 = Infinity;
+    this.y2 = -Infinity;
   }
 
   Scale.prototype = {
@@ -37,13 +37,13 @@
     },
 
     range: function(y1, y2) {
-      this.y1 = y1;
-      this.y2 = y2;
+      this.y1 = Math.min(y1, this.y1);
+      this.y2 = Math.max(y2, this.y2);
     },
 
     domain: function(x1, x2) {
-      this.x1 = x1;
-      this.x2 = x2;
+      this.x1 = Math.min(x1, this.x1);
+      this.x2 = Math.max(x2, this.x2);
     },
 
     auto: function(data) {
@@ -53,15 +53,9 @@
       }
 
       if(isNaN(data[0]) && data[0] instanceof Array) {
-        this.x1 = Infinity;
-        this.x2 = -Infinity;
-        this.y1 = Infinity;
-        this.y2 = -Infinity;
         for(var i = 0;i < data.length;i++) {
-          this.x1 = Math.min(this.x1, data[i][0]);
-          this.x2 = Math.max(this.x2, data[i][0]);
-          this.y1 = Math.min(this.y1, data[i][1]);
-          this.y2 = Math.max(this.y2, data[i][1]);
+          this.range(data[i][1], data[i][1]);
+          this.domain(data[i][0], data[i][0]);
         }
         return;
       }
